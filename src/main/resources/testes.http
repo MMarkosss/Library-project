@@ -1,0 +1,28 @@
+### Cadastrar Livro 1
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "titulo": "O Senhor dos Anéis",
+  "autor": "J.R.R. Tolkien",
+  "paginas": 1200,
+  "genero": "FICCAO",
+  "preco": 150.00,
+  "dataLancamento": "1954-07-29"
+}
+
+### Cadastrar Livro 2
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "titulo": "Código Limpo",
+  "autor": "Robert Martin",
+  "paginas": 400,
+  "genero": "TECNICO",
+  "preco": 90.00,
+  "dataLancamento": "2008-08-01"
+}
+
+### Listar Todos
+GET http://localhost:8080/livros
