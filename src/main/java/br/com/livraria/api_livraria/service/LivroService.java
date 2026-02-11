@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service // 1. "Spring, gerencie essa classe pra mim"
 public class LivroService {
@@ -23,5 +24,9 @@ public class LivroService {
     // Método para LISTAR todos os livros
     public List<Livro> listarTodos() {
         return repository.findAll();
+    }
+
+    public Optional<Livro> buscarPorId(Long id) {
+        return repository.findById(id);
     }
 }

@@ -25,4 +25,10 @@ Content-Type: application/json
 }
 
 ### Listar Todos
-GET http://localhost:8080/livros
+###GET http://localhost:8080/livros
+
+### Buscar Livro que EXISTE (Primeiro cadastre um livro!)
+GET http://localhost:8080/livros/1
+
+### Buscar Livro que NÃO EXISTE
+GET http://localhost:8080/livros/999
