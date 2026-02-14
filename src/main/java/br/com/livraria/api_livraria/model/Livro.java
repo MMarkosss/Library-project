@@ -71,9 +71,14 @@ public class Livro {
         return dataLancamento;
     }
 
-    // 3. GETTER DO ID (Para o JSON conseguir ler o ID gerado)
+    // 3. GETTER e SETTER DO ID (Para o JSON conseguir ler o ID gerado e o put funcionar)
     public Long getId() {
         return id;
+    }
+
+    // ADICIONE ESTE MÉTODO:
+    public void setId(Long id) {
+        this.id = id;
     }
     // 1. CONSTRUTOR VAZIO (Obrigatório para o JPA funcionar)
     public Livro() { }

@@ -29,4 +29,10 @@ public class LivroService {
     public Optional<Livro> buscarPorId(Long id) {
         return repository.findById(id);
     }
+
+    // Método para DELETAR um livro
+    public void deletar(Long id) {
+        repository.deleteById(id);
+    }
+    
 }

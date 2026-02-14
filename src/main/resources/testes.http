@@ -25,10 +25,52 @@ Content-Type: application/json
 }
 
 ### Listar Todos
-###GET http://localhost:8080/livros
+GET http://localhost:8080/livros
 
 ### Buscar Livro que EXISTE (Primeiro cadastre um livro!)
 GET http://localhost:8080/livros/1
 
 ### Buscar Livro que NÃO EXISTE
 GET http://localhost:8080/livros/999
+
+### Deletar Livro ID 1
+DELETE http://localhost:8080/livros/1
+
+### Atualizar o Livro ID 1 (Mudando o preço de 150 para 99.90)
+PUT http://localhost:8080/livros/1
+Content-Type: application/json
+
+{
+  "titulo": "O Senhor dos Anéis - Edição de Bolso",
+  "autor": "J.R.R. Tolkien",
+  "paginas": 1200,
+  "genero": "FICCAO",
+  "preco": 99.90,
+  "dataLancamento": "1954-07-29"
+}
+
+### Atualizar o Livro ID 1 (Mudando o preço de 150 para 99.90)
+PUT http://localhost:8080/livros/1
+Content-Type: application/json
+
+{
+  "titulo": "O Senhor dos Anéis - Edição de Bolso",
+  "autor": "J.R.R. Tolkien",
+  "paginas": 1200,
+  "genero": "FICCAO",
+  "preco": 99.90,
+  "dataLancamento": "1954-07-29"
+}
+
+### Atualizar o Livro ID 1 (Mudando o preço de 150 para 99.90)
+PUT http://localhost:8080/livros/99
+Content-Type: application/json
+
+{
+  "titulo": "O Senhor dos Anéis - Edição de Bolso",
+  "autor": "J.R.R. Tolkien",
+  "paginas": 1200,
+  "genero": "FICCAO",
+  "preco": 99.90,
+  "dataLancamento": "1954-07-29"
+}

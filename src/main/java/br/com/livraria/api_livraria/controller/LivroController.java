@@ -44,4 +44,33 @@ public class LivroController {
             return ResponseEntity.notFound().build();
         }
     }
+    // DELETE: Para remover um livro
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
+        // Aproveitamos o método que já criamos para checar se existe
+        if (service.buscarPorId(id).isPresent()) {
+            service.deletar(id);
+            return ResponseEntity.noContent().build(); // Retorna 204 No Content
+        }
+        return ResponseEntity.notFound().build(); // Retorna 404 se não achar
+    }
+    // PUT: Para atualizar um livro existente
+    @PutMapping("/{id}")
+    public ResponseEntity<Livro> atualizar(@PathVariable Long id, @RequestBody Livro livroAtualizado) {
+
+        // 1. Verificamos se o livro existe no banco
+        if (service.buscarPorId(id).isPresent()) {
+
+            // 2. Garantimos que o ID do objeto é o mesmo da URL
+            livroAtualizado.setId(id);
+
+            // 3. Mandamos salvar (como já tem ID, o Spring fará um UPDATE)
+            Livro livroSalvo = service.cadastrar(livroAtualizado);
+
+            return ResponseEntity.ok(livroSalvo); // Retorna 200 OK com os dados novos
+        }
+
+        // Se não achar o livro, retorna 404
+        return ResponseEntity.notFound().build();
+    }
 }
