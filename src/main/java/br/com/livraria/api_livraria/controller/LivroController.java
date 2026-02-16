@@ -2,11 +2,17 @@ package br.com.livraria.api_livraria.controller;
 
 import br.com.livraria.api_livraria.model.Livro;
 import br.com.livraria.api_livraria.service.LivroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Optional;
+import br.com.livraria.api_livraria.dto.LivroResumoDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 
 @RestController // 1. Diz que essa classe recebe requisições HTTP (JSON)
 @RequestMapping("/livros") // 2. Define o endereço base: localhost:8080/livros
@@ -17,14 +23,20 @@ public class LivroController {
 
     // GET: Para quem acessar via navegador ou Postman
     @GetMapping
-    public List<Livro> listar() {
-        return service.listarTodos();
+    public Page<LivroResumoDTO> listar(@PageableDefault(size = 10, sort = {"titulo"}) Pageable paginacao) {
+
+        // 1. Vai ao banco buscar a PÁGINA de livros (ex: 10 livros)
+        Page<Livro> paginaDeLivros = service.listarTodos(paginacao);
+
+        // 2. Converte a página de Livro para uma página de DTO
+        return paginaDeLivros.map(livro -> new LivroResumoDTO(livro.getId(), livro.getTitulo(), livro.getPreco()));
     }
 
     // POST: Para quem quiser enviar dados para salvar
     @PostMapping
-    public Livro criar(@RequestBody Livro livro) {
+    public Livro criar(@Valid @RequestBody Livro livro) {
         return service.cadastrar(livro);
+
     }
 
     // Importe org.springframework.http.ResponseEntity;
@@ -56,7 +68,7 @@ public class LivroController {
     }
     // PUT: Para atualizar um livro existente
     @PutMapping("/{id}")
-    public ResponseEntity<Livro> atualizar(@PathVariable Long id, @RequestBody Livro livroAtualizado) {
+    public ResponseEntity<Livro> atualizar(@PathVariable Long id,@Valid @RequestBody Livro livroAtualizado) {
 
         // 1. Verificamos se o livro existe no banco
         if (service.buscarPorId(id).isPresent()) {

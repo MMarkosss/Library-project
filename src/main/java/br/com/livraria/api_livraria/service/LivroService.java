@@ -4,6 +4,8 @@ import br.com.livraria.api_livraria.model.Livro;
 import br.com.livraria.api_livraria.repository.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +24,8 @@ public class LivroService {
     }
 
     // Método para LISTAR todos os livros
-    public List<Livro> listarTodos() {
-        return repository.findAll();
+    public Page<Livro> listarTodos(Pageable paginacao) {
+        return repository.findAll(paginacao);
     }
 
     public Optional<Livro> buscarPorId(Long id) {

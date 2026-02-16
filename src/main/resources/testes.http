@@ -24,8 +24,89 @@ Content-Type: application/json
   "dataLancamento": "2008-08-01"
 }
 
+### Cadastrar livro 3
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "titulo": "A empregada: Bem-vinda à família",
+  "autor": "Freida McFadden",
+  "paginas": 340,
+  "genero": "ROMANCE",
+  "preco": 50,
+  "dataLancamento": "2012-10-12"
+}
+
+### Cadastrar livro 4
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "titulo": "A Arte da Guerra - Sun Tzu",
+  "autor": "Sun Tzu ",
+  "paginas": 80,
+  "genero": "TECNICO",
+  "preco": 20,
+  "dataLancamento": "2021-03-21"
+}
+
+### Cadastrar livro 5
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "titulo": "A revolução dos bichos",
+  "autor": "George Orwell",
+  "paginas": 152,
+  "genero": "FICCAO",
+  "preco": 30,
+  "dataLancamento": "2019-02-14"
+}
+
+### Cadastrar um Ebook
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "tipo": "EBOOK",
+  "titulo": "Código Limpo",
+  "autor": "Robert Martin",
+  "paginas": 400,
+  "genero": "TECNICO",
+  "preco": 90.0,
+  "dataLancamento": "2008-08-01",
+  "marcaDagua": "marcos_torres_comprou_isso"
+}
+
+
+
+### Cadastrar um Livro Físico
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "tipo": "FISICO",
+  "titulo": "O Senhor dos Anéis",
+  "autor": "J.R.R. Tolkien",
+  "paginas": 1200,
+  "genero": "FICCAO",
+  "preco": 150.0,
+  "dataLancamento": "1954-07-29"
+}
+
+
+
 ### Listar Todos
 GET http://localhost:8080/livros
+
+### Listar a primeira página (página 0), com 2 livros por página
+GET http://localhost:8080/livros?page=0&size=2
+
+### Listar a segunda página (página 1), com 2 livros por página
+GET http://localhost:8080/livros?page=1&size=2
+
+### Listar ordenando pelo preço mais barato primeiro
+GET http://localhost:8080/livros?size=5&sort=preco,asc
 
 ### Buscar Livro que EXISTE (Primeiro cadastre um livro!)
 GET http://localhost:8080/livros/1
@@ -49,8 +130,8 @@ Content-Type: application/json
   "dataLancamento": "1954-07-29"
 }
 
-### Atualizar o Livro ID 1 (Mudando o preço de 150 para 99.90)
-PUT http://localhost:8080/livros/1
+### Tentar Atualizar o Livro com ID 99 que não existe.
+PUT http://localhost:8080/livros/99
 Content-Type: application/json
 
 {
@@ -62,15 +143,15 @@ Content-Type: application/json
   "dataLancamento": "1954-07-29"
 }
 
-### Atualizar o Livro ID 1 (Mudando o preço de 150 para 99.90)
-PUT http://localhost:8080/livros/99
+### Tentar Cadastrar um Livro Inválido (Preço negativo e título vazio)
+POST http://localhost:8080/livros
 Content-Type: application/json
 
 {
-  "titulo": "O Senhor dos Anéis - Edição de Bolso",
-  "autor": "J.R.R. Tolkien",
-  "paginas": 1200,
+  "titulo": "",
+  "autor": "Alguém",
+  "paginas": -50,
   "genero": "FICCAO",
-  "preco": 99.90,
-  "dataLancamento": "1954-07-29"
+  "preco": -10.0,
+  "dataLancamento": "2026-01-01"
 }
