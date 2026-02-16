@@ -32,3 +32,11 @@ Este projeto vai além de um CRUD básico, implementando padrões reais do merca
 1. Clone este repositório:
    ```bash
    git clone [https://github.com/MMarkosss/Library-project.git](https://github.com/MMarkosss/Library-project.git)
+   
+
+📖 Como Acessar a Documentação (Swagger)
+Com a aplicação rodando, abra o seu navegador e acesse a interface interativa do Swagger para visualizar e testar todos os endpoints (GET, POST, PUT, DELETE):
+
+👉 http://localhost:8080/swagger-ui/index.html
+
+Desenvolvido por Marcos - Estudante de Engenharia da Computação e aspirante a Desenvolvedor Backend.  
