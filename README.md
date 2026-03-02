@@ -44,3 +44,14 @@ docker run --name postgres-livraria \
   -e POSTGRES_DB=livrariadb \
   -p 5432:5432 \
   -d postgres:15
+```
+Passo 2: Executar a Aplicação Spring Boot
+Com o banco rodando, inicie a aplicação via Maven. O Flyway se encarregará de criar as tabelas automaticamente.
+```
+mvn spring-boot:run
+```
+Documentação da API (Swagger)
+Com o servidor rodando, acesse a documentação interativa pelo navegador:
+👉 http://localhost:8080/swagger-ui/index.html
+
+Pelo Swagger, é possível visualizar o catálogo de rotas, os schemas esperados, e executar testes diretos (GET, POST, PUT, DELETE) contra o banco de dados.
