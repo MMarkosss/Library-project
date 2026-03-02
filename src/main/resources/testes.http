@@ -1,100 +1,62 @@
-### Cadastrar Livro 1
-POST http://localhost:8080/livros
+### 1. Cadastrar um Autor primeiro
+POST http://localhost:8080/autores
 Content-Type: application/json
 
 {
-  "titulo": "O Senhor dos Anéis",
-  "autor": "J.R.R. Tolkien",
-  "paginas": 1200,
-  "genero": "FICCAO",
-  "preco": 150.00,
-  "dataLancamento": "1954-07-29"
+  "nome": "J.R.R. Tolkien",
+  "biografia": "Escritor britânico e professor universitário."
 }
 
-### Cadastrar Livro 2
-POST http://localhost:8080/livros
-Content-Type: application/json
-
-{
-  "titulo": "Código Limpo",
-  "autor": "Robert Martin",
-  "paginas": 400,
-  "genero": "TECNICO",
-  "preco": 90.00,
-  "dataLancamento": "2008-08-01"
-}
-
-### Cadastrar livro 3
-POST http://localhost:8080/livros
-Content-Type: application/json
-
-{
-  "titulo": "A empregada: Bem-vinda à família",
-  "autor": "Freida McFadden",
-  "paginas": 340,
-  "genero": "ROMANCE",
-  "preco": 50,
-  "dataLancamento": "2012-10-12"
-}
-
-### Cadastrar livro 4
-POST http://localhost:8080/livros
-Content-Type: application/json
-
-{
-  "titulo": "A Arte da Guerra - Sun Tzu",
-  "autor": "Sun Tzu ",
-  "paginas": 80,
-  "genero": "TECNICO",
-  "preco": 20,
-  "dataLancamento": "2021-03-21"
-}
-
-### Cadastrar livro 5
-POST http://localhost:8080/livros
-Content-Type: application/json
-
-{
-  "titulo": "A revolução dos bichos",
-  "autor": "George Orwell",
-  "paginas": 152,
-  "genero": "FICCAO",
-  "preco": 30,
-  "dataLancamento": "2019-02-14"
-}
-
-### Cadastrar um Ebook
-POST http://localhost:8080/livros
-Content-Type: application/json
-
-{
-  "tipo": "EBOOK",
-  "titulo": "Código Limpo",
-  "autor": "Robert Martin",
-  "paginas": 400,
-  "genero": "TECNICO",
-  "preco": 90.0,
-  "dataLancamento": "2008-08-01",
-  "marcaDagua": "marcos_torres_comprou_isso"
-}
-
-
-
-### Cadastrar um Livro Físico
+### Cadastrar o Livro apontando para o Autor 1
 POST http://localhost:8080/livros
 Content-Type: application/json
 
 {
   "tipo": "FISICO",
   "titulo": "O Senhor dos Anéis",
-  "autor": "J.R.R. Tolkien",
   "paginas": 1200,
   "genero": "FICCAO",
   "preco": 150.0,
-  "dataLancamento": "1954-07-29"
+  "dataLancamento": "1954-07-29",
+  "autorId": 1
 }
 
+###Cadastro de Ebook para o autor 1
+POST http://localhost:8080/livros
+Content-Type: application/json
 
+{
+  "tipo": "EBOOK",
+  "titulo": "O Senhor dos Anéis",
+  "paginas": 1200,
+  "genero": "FICCAO",
+  "preco": 100.0,
+  "dataLancamento": "1954-07-29",
+  "autorId": 1,
+  "marcaDagua": "Livraria Wow"
+}
+
+### 3. Atualização do put com id e formatado com dto de cadastro.
+PUT http://localhost:8080/livros/1
+Content-Type: application/json
+
+{
+  "tipo": "FISICO",
+  "titulo": "O Senhor dos Anéis",
+  "paginas": 1200,
+  "genero": "FICCAO",
+  "preco": 99.0,
+  "dataLancamento": "1954-07-29",
+  "autorId":1
+}
+
+### Aplicar Desconto de 10%
+PUT http://localhost:8080/livros/1/aplicar-desconto
+Content-Type: application/json
+
+{
+  "percentual": 10
+}
 
 ### Listar Todos
 GET http://localhost:8080/livros
@@ -117,41 +79,8 @@ GET http://localhost:8080/livros/999
 ### Deletar Livro ID 1
 DELETE http://localhost:8080/livros/1
 
-### Atualizar o Livro ID 1 (Mudando o preço de 150 para 99.90)
-PUT http://localhost:8080/livros/1
-Content-Type: application/json
+### Deletar Livro que não existe
+DELETE http://localhost:8080/livros/999
 
-{
-  "titulo": "O Senhor dos Anéis - Edição de Bolso",
-  "autor": "J.R.R. Tolkien",
-  "paginas": 1200,
-  "genero": "FICCAO",
-  "preco": 99.90,
-  "dataLancamento": "1954-07-29"
-}
-
-### Tentar Atualizar o Livro com ID 99 que não existe.
-PUT http://localhost:8080/livros/99
-Content-Type: application/json
-
-{
-  "titulo": "O Senhor dos Anéis - Edição de Bolso",
-  "autor": "J.R.R. Tolkien",
-  "paginas": 1200,
-  "genero": "FICCAO",
-  "preco": 99.90,
-  "dataLancamento": "1954-07-29"
-}
-
-### Tentar Cadastrar um Livro Inválido (Preço negativo e título vazio)
-POST http://localhost:8080/livros
-Content-Type: application/json
-
-{
-  "titulo": "",
-  "autor": "Alguém",
-  "paginas": -50,
-  "genero": "FICCAO",
-  "preco": -10.0,
-  "dataLancamento": "2026-01-01"
-}
+### Buscar Autor e seu portfólio de livros
+GET http://localhost:8080/autores/1

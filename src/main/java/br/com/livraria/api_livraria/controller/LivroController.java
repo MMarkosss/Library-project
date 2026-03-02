@@ -1,21 +1,24 @@
 package br.com.livraria.api_livraria.controller;
 
+import br.com.livraria.api_livraria.dto.DescontoDTO;
+import br.com.livraria.api_livraria.dto.LivroCadastroDTO;
 import br.com.livraria.api_livraria.model.Livro;
 import br.com.livraria.api_livraria.service.LivroService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import java.util.List;
-import java.util.Optional;
 import br.com.livraria.api_livraria.dto.LivroResumoDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 
 @RestController // 1. Diz que essa classe recebe requisições HTTP (JSON)
 @RequestMapping("/livros") // 2. Define o endereço base: localhost:8080/livros
+@Tag(name = "Catálogo de Livros", description = "Operações para gerenciamento de livros e e-books da loja")
 public class LivroController {
 
     @Autowired
@@ -29,60 +32,74 @@ public class LivroController {
         Page<Livro> paginaDeLivros = service.listarTodos(paginacao);
 
         // 2. Converte a página de Livro para uma página de DTO
-        return paginaDeLivros.map(livro -> new LivroResumoDTO(livro.getId(), livro.getTitulo(), livro.getPreco()));
+        return paginaDeLivros.map(livro -> new LivroResumoDTO(livro.getId(), livro.getTitulo(), livro.getPreco(),getClass().getSimpleName()));
     }
 
     // POST: Para quem quiser enviar dados para salvar
     @PostMapping
-    public Livro criar(@Valid @RequestBody Livro livro) {
-        return service.cadastrar(livro);
+    public ResponseEntity<LivroResumoDTO> cadastrar(@RequestBody @Valid LivroCadastroDTO dto) {
 
+        // 1. Manda o DTO para o Service fazer o trabalho sujo
+        Livro livroSalvo = service.salvar(dto);
+
+
+        // 2. Transforma o Livro salvo no DTO de Saída e devolve Status 201 (Created)
+        LivroResumoDTO resposta = new LivroResumoDTO(livroSalvo);
+
+        return ResponseEntity.status(201).body(resposta);
     }
 
-    // Importe org.springframework.http.ResponseEntity;
-// Importe java.util.Optional;
 
-    @GetMapping("/{id}") // A URL será localhost:8080/livros/1
-    public ResponseEntity<Livro> buscarUm(@PathVariable Long id) {
-        // 1. Chama o service
-        Optional<Livro> caixa = service.buscarPorId(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<LivroResumoDTO> buscarUm(@PathVariable Long id) {
+        // 1. Pede para o service buscar (Se não existir, o erro 404 é lançado lá dentro e o Controller nem fica sabendo)
+        Livro livro = service.buscarPorId(id);
 
-        // 2. Verifica se tem algo na caixa
-        if (caixa.isPresent()) {
-            // Se tem, retorna 200 OK com o livro dentro
-            return ResponseEntity.ok(caixa.get());
-        } else {
-            // Se não tem, retorna 404 Not Found (sem corpo)
-            return ResponseEntity.notFound().build();
-        }
+        // 2. Converte para a caixinha de resumo
+        LivroResumoDTO resposta = new LivroResumoDTO(livro);
+
+        // 3. Retorna 200 OK
+        return ResponseEntity.ok(resposta);
     }
+
+
     // DELETE: Para remover um livro
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
-        // Aproveitamos o método que já criamos para checar se existe
-        if (service.buscarPorId(id).isPresent()) {
-            service.deletar(id);
-            return ResponseEntity.noContent().build(); // Retorna 204 No Content
-        }
-        return ResponseEntity.notFound().build(); // Retorna 404 se não achar
+        // 1. Manda o service deletar
+        service.deletar(id);
+
+        // 2. Se deu tudo certo, retorna o 204 No Content
+        return ResponseEntity.noContent().build();
     }
+
+
     // PUT: Para atualizar um livro existente
     @PutMapping("/{id}")
-    public ResponseEntity<Livro> atualizar(@PathVariable Long id,@Valid @RequestBody Livro livroAtualizado) {
+    public ResponseEntity<LivroResumoDTO> atualizar(@PathVariable Long id, @Valid @RequestBody LivroCadastroDTO dto) {
 
-        // 1. Verificamos se o livro existe no banco
-        if (service.buscarPorId(id).isPresent()) {
+        // 1. Manda o gerente trabalhar
+        Livro livroAtualizado = service.atualizar(id, dto);
 
-            // 2. Garantimos que o ID do objeto é o mesmo da URL
-            livroAtualizado.setId(id);
+        // 2. Empacota a resposta
+        LivroResumoDTO resposta = new LivroResumoDTO(livroAtualizado);
 
-            // 3. Mandamos salvar (como já tem ID, o Spring fará um UPDATE)
-            Livro livroSalvo = service.cadastrar(livroAtualizado);
+        // 3. Devolve 200 OK
+        return ResponseEntity.ok(resposta);
+    }
 
-            return ResponseEntity.ok(livroSalvo); // Retorna 200 OK com os dados novos
-        }
 
-        // Se não achar o livro, retorna 404
-        return ResponseEntity.notFound().build();
+    @PutMapping("/{id}/aplicar-desconto")
+    @Operation(summary = "Aplica um desconto promocional",
+            description = "Verifica se o livro implementa a interface Promocional e aplica o percentual de desconto no preço. Retorna erro 400 se o livro não aceitar descontos.")
+    public ResponseEntity<LivroResumoDTO> aplicarDesconto(@PathVariable Long id, @Valid @RequestBody DescontoDTO dto) {
+
+        // Manda o Service tentar aplicar o desconto
+        Livro livroComDesconto = service.aplicarDesconto(id, dto);
+
+        // Converte o livro com o novo preço para a caixinha de resumo
+        LivroResumoDTO resposta = new LivroResumoDTO(livroComDesconto);
+
+        return ResponseEntity.ok(resposta);
     }
 }

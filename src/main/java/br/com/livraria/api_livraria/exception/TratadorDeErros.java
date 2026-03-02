@@ -1,10 +1,12 @@
 package br.com.livraria.api_livraria.exception;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -27,5 +29,15 @@ public class TratadorDeErros {
         public DadosErroValidacao(FieldError erro) {
             this(erro.getField(), erro.getDefaultMessage());
         }
+    }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity tratarErro404() {
+        // Quando qualquer parte do sistema não encontrar um dado no banco, devolve 404 vazio!
+        return ResponseEntity.notFound().build();
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity tratarErroRegraDeNegocio(IllegalArgumentException ex) {
+        // Devolve o status 400 e a mensagem que o Service enviou no "throw new..."
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

@@ -13,6 +13,11 @@ import jakarta.persistence.DiscriminatorValue;
 // Importe estas duas classes do Jackson(heranca):
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+//Importe de tabelas relacionais
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+//importe para falar que column é definido not null no banco (db).
+import jakarta.persistence.Column;
 
 // 1. Diz ao Spring: "Olhe para uma propriedade chamada 'tipo' no JSON"
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
@@ -27,29 +32,29 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @DiscriminatorValue("FISICO") // 3. Se for um livro normal, a coluna terá a palavra "FISICO"
 @Table(name = "tb_livros")
 public class Livro {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @NotBlank: Não pode ser nulo E não pode ser texto vazio ("")
-    @NotBlank(message = "O título é obrigatório e não pode estar em branco")
+    @Column(nullable = false)
     private String titulo;
 
-    @NotBlank(message = "O nome do autor é obrigatório")
-    private String autor;
+    @ManyToOne // 1. Diz ao Spring: "Muitos livros para Um autor"
+    @JoinColumn(name = "autor_id",nullable = false) // 2. Cria a coluna de Chave Estrangeira no banco
+    private Autor autor;
 
-    // @Positive: Tem que ser um número maior que zero
-    @Positive(message = "O número de páginas deve ser maior que zero")
     private int paginas;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "O gênero não pode ser nulo")
+    @Column(nullable = false)
     private Genero genero;
 
-    @Positive(message = "O preço deve ser maior que zero")
+    // Obs: Se 'paginas' for do tipo primitivo 'int' e 'preco' for 'double',
+    // o Java já sabe que eles não aceitam nulos, então geralmente não dão esse erro.
+
     private double preco;
 
-    @NotNull(message = "A data de lançamento é obrigatória")
     private LocalDate dataLancamento;
 
     public void setTitulo(String novoTitulo) {
@@ -60,11 +65,11 @@ public class Livro {
         return this.titulo;
     }
 
-    public void setAutor(String novoAutor) {
+    public void setAutor(Autor novoAutor) {
         this.autor = novoAutor;
     }
 
-    public String getAutor() {
+    public Autor getAutor() {
         return this.autor;
     }
 
@@ -118,7 +123,7 @@ public class Livro {
     // 1. CONSTRUTOR VAZIO (Obrigatório para o JPA funcionar)
     public Livro() { }
     // Construtor
-    public Livro(String titulo, String autor, int paginas, Genero genero, double preco, LocalDate dataLancamento) {
+    public Livro(String titulo, Autor autor, int paginas, Genero genero, double preco, LocalDate dataLancamento) {
         setTitulo(titulo);
         setAutor(autor);
         setPaginas(paginas);
