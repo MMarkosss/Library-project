@@ -1,42 +1,46 @@
-# 📚 API Livraria - Spring Boot RESTful
+# 📚 API Livraria - Sistema de Gerenciamento de Livros e Autores
 
-![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
-![H2 Database](https://img.shields.io/badge/H2_Database-4479A1?style=for-the-badge&logo=databricks&logoColor=white)
-![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
+Uma API RESTful robusta desenvolvida em **Java 21** e **Spring Boot 4.0** para o gerenciamento de um catálogo de livros e autores.
 
-Uma API RESTful completa para gerenciamento de um catálogo de livros e e-books. Este projeto foi desenvolvido como parte dos meus estudos em Engenharia de Computação (Univesp) com foco em aprofundar os conhecimentos no ecossistema Spring e boas práticas de arquitetura Backend.
+Este projeto foi construído com foco em boas práticas de Engenharia de Software, arquitetura limpa, e padrões de mercado, servindo como uma base sólida para sistemas de nível de produção.
 
-## 🚀 Funcionalidades e Conceitos Aplicados
+## 🚀 Tecnologias e Ferramentas
 
-Este projeto vai além de um CRUD básico, implementando padrões reais do mercado corporativo:
+* **Linguagem:** Java 21
+* **Framework:** Spring Boot 4.0
+* **Banco de Dados:** PostgreSQL (via Docker)
+* **Migrações de Banco:** Flyway
+* **ORM:** Spring Data JPA / Hibernate
+* **Documentação:** Swagger / Springdoc OpenAPI 3
+* **Testes:** JUnit 5 e Mockito
 
-* **Arquitetura em Camadas:** Separação clara entre `Controller`, `Service` e `Repository`.
-* **Herança no Banco de Dados (JPA):** Utilização da estratégia `SINGLE_TABLE` para mapear polimorfismo entre as classes `Livro` e `Ebook` na mesma tabela do banco relacional, incluindo resolução de instâncias no JSON via `@JsonTypeInfo`.
-* **Ocultação de Dados (DTO Pattern):** Uso de `Records` do Java moderno para transitar apenas os dados necessários para o cliente, evitando *Over-fetching*.
-* **Validações de Entrada (Bean Validation):** Proteção das rotas contra dados inconsistentes utilizando `@Valid`, `@NotBlank`, `@Positive`, etc.
-* **Tratamento Global de Exceções:** Implementação de `@RestControllerAdvice` para interceptar erros (como o Erro 400) e devolver mensagens em formato JSON limpo e padronizado.
-* **Paginação e Ordenação:** Uso da interface `Pageable` do Spring Data JPA para entregar dados em lotes otimizados (ex: `?page=0&size=10&sort=preco,asc`).
-* **Documentação Viva:** Interface gráfica do Swagger UI configurada para testes diretos no navegador.
+## 🧠 Conceitos Aplicados e Arquitetura
 
-## 🛠️ Tecnologias Utilizadas
+Este projeto vai muito além de um CRUD básico, aplicando conceitos avançados de desenvolvimento backend:
 
-* **Java 17+**
-* **Spring Boot 3** (Web, Data JPA, Validation)
-* **Banco de Dados H2** (Em memória)
-* **Springdoc OpenAPI** (Swagger UI)
-* **Maven** (Gerenciador de Dependências)
+* **Arquitetura RESTful & SOLID:** Separação clara de responsabilidades entre `Controllers` (camada de requisição/resposta), `Services` (regras de negócio) e `Repositories` (acesso a dados), erradicando lógicas condicionais complexas das rotas.
+* **Padrão DTO (Data Transfer Object):** Utilização de *Java Records* com construtores inteligentes (Reflection) para mapear entidades. Isso garante o encapsulamento dos dados sensíveis, formata as respostas JSON de forma limpa e previne erros clássicos como *Loop Infinito* (StackOverflowError) em relacionamentos bidirecionais.
+* **Orientação a Objetos e Polimorfismo:** Implementação de Herança no banco de dados. O sistema diferencia livros do tipo `Fisico` e `Ebook`, aplicando regras de negócio específicas (como descontos) através de interfaces como `Promocional`, garantindo que livros físicos sejam barrados de promoções digitais de forma segura.
+* **Relacionamentos de Banco de Dados (JPA):** Mapeamento estrito (`validate`) de relacionamentos `@ManyToOne` e `@OneToMany` entre Autores e Livros, garantindo integridade referencial.
+* **Tratamento Global de Exceções:** Implementação de um `@ControllerAdvice` para interceptar erros em tempo de execução (como *EntityNotFoundException* e *IllegalArgumentException*) e traduzi-los para respostas HTTP amigáveis e padronizadas (ex: `404 Not Found` e `400 Bad Request`), mantendo o log do servidor limpo.
+* **Infraestrutura como Código (Containers):** Banco de dados isolado rodando em contêineres **Docker**, simulando um ambiente de infraestrutura real.
+* **Versionamento de Banco de Dados:** Uso do **Flyway** para garantir que as mudanças de schema (`V1__criar_tabelas.sql`) sejam reprodutíveis, rastreáveis e consistentes em qualquer ambiente.
+* **Testes Automatizados:** Testes de Unidade focados nas regras de negócio da aplicação usando **JUnit** e simulação do acesso ao banco de dados com **Mockito**, garantindo a cobertura do "caminho feliz" e das exceções da API.
+* **Documentação Interativa:** API totalmente documentada via **Swagger UI**, oferecendo um contrato claro e testável para clientes Front-end e Mobile.
 
-## ⚙️ Como Executar o Projeto
+## ⚙️ Como Executar o Projeto Localmente
 
-1. Clone este repositório:
-   ```bash
-   git clone [https://github.com/MMarkosss/Library-project.git](https://github.com/MMarkosss/Library-project.git)
-   
+### Pré-requisitos
+* [Java 21](https://jdk.java.net/21/)
+* [Maven](https://maven.apache.org/)
+* [Docker](https://www.docker.com/)
 
-📖 Como Acessar a Documentação (Swagger)
-Com a aplicação rodando, abra o seu navegador e acesse a interface interativa do Swagger para visualizar e testar todos os endpoints (GET, POST, PUT, DELETE):
-
-👉 http://localhost:8080/swagger-ui/index.html
-
-Desenvolvido por Marcos - Estudante de Engenharia da Computação e aspirante a Desenvolvedor Backend.  
+### Passo 1: Subir o Banco de Dados (Docker)
+Abra o seu terminal e execute o comando abaixo para iniciar o contêiner do PostgreSQL:
+```bash
+docker run --name postgres-livraria \
+  -e POSTGRES_USER=marcos \
+  -e POSTGRES_PASSWORD=12345 \
+  -e POSTGRES_DB=livrariadb \
+  -p 5432:5432 \
+  -d postgres:15
