@@ -1,0 +1,163 @@
+### 1. Cadastrar um Autor primeiro
+POST http://localhost:8080/autores
+Content-Type: application/json
+
+{
+  "nome": "J.R.R. Tolkien",
+  "biografia": "Escritor britânico e professor universitário."
+}
+
+### 1. Cadastrar um Autor
+POST http://localhost:8080/autores
+Content-Type: application/json
+
+{
+  "nome": "Douglas Adams",
+  "biografia": "Douglas Noël Adams foi um escritor e comediante britânico, famoso por ter escrito esquetes para a tv e o guia dos mochileiro"
+}
+
+### 1. Cadastrar um Autor
+POST http://localhost:8080/autores
+Content-Type: application/json
+
+{
+  "nome": "Robert C. Martin",
+  "biografia": "O autor do livro Clean Code: A Handbook of Agile Software Craftsmanship (Código Limpo)."
+}
+
+
+
+### 2. Cadastrar o Livro fisico com herança do tipo joined
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "titulo": "O Código Da Vinci",
+  "dataLancamento": "2003-03-18",
+  "paginas": 500,
+  "preco": 60.0,
+  "genero": "FICCAO",
+  "autorId": 1,
+  "tipo": "Fisico",
+  "pesoGramas": 450
+}
+
+###Cadastro de Ebook para o autor 2
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "titulo": "Clean Code",
+  "preco": 80.0,
+  "paginas": 300,
+  "dataLancamento": "2008-09-01",
+  "genero": "TECNICO",
+  "autorId": 2,
+  "tipo": "Ebook",
+  "tamanhoMb": 5.4,
+  "marcaDagua": "Livraria Wow"
+}
+
+### 3. Atualização do put com id e formatado com dto de cadastro.
+PUT http://localhost:8080/livros/1
+Content-Type: application/json
+
+{
+  "tipo": "FISICO",
+  "titulo": "O Senhor dos Anéis",
+  "paginas": 1200,
+  "genero": "FICCAO",
+  "preco": 99.0,
+  "dataLancamento": "1954-07-29",
+  "autorId":1
+}
+
+### Aplicar Desconto de 10%
+PUT http://localhost:8080/livros/1/aplicar-desconto
+Content-Type: application/json
+
+{
+  "percentual": 10
+}
+
+### Listar Todos
+GET http://localhost:8080/livros
+
+### Listar a primeira página (página 0), com 2 livros por página
+GET http://localhost:8080/livros?page=0&size=2
+
+### Listar a segunda página (página 1), com 2 livros por página
+GET http://localhost:8080/livros?page=1&size=2
+
+### Listar ordenando pelo preço mais barato primeiro
+GET http://localhost:8080/livros?size=5&sort=preco,asc
+
+### Buscar Livro que EXISTE (Primeiro cadastre um livro!)
+GET http://localhost:8080/livros/1
+
+### Buscar Livro que NÃO EXISTE
+GET http://localhost:8080/livros/999
+
+### Deletar Livro ID 1
+DELETE http://localhost:8080/livros/3
+
+### Deletar Livro que não existe
+DELETE http://localhost:8080/livros/999
+
+### Buscar Autor e seu portfólio de livros
+GET http://localhost:8080/autores/2
+
+### Criar Tag 1
+POST http://localhost:8080/tags
+Content-Type: application/json
+
+{
+  "nome": "Ficção"
+}
+
+### Criar Tag 2
+POST http://localhost:8080/tags
+Content-Type: application/json
+
+{
+  "nome": "Tecnologia"
+}
+
+### Criar Ebook com Tags (ID 1 = Ficção, ID 2 = Tecnologia)
+POST http://localhost:8080/livros
+Content-Type: application/json
+
+{
+  "titulo": "O Guia do Mochileiro das Galáxias",
+  "preco": 42.0,
+  "paginas": 300,
+  "dataLancamento": "2008-09-01",
+  "genero": "FICCAO",
+  "autorId": 3,
+  "tipo": "Ebook",
+  "tamanhoMb": 5.4,
+  "marcaDagua": "Livraria Wow",
+  "tagIds": [1, 2]
+}
+
+### Listar todos os Autores
+GET http://localhost:8080/autores
+
+### 3. Atualização do put com id e formatado com dto de cadastro.
+PUT http://localhost:8080/livros/8
+Content-Type: application/json
+
+{
+  "tipo": "FISICO",
+  "titulo": "Zezão",
+  "paginas": 300,
+  "genero": "TERROR",
+  "preco": 105.0,
+  "dataLancamento": "3229-03-22",
+  "autorId":1,
+  "pesoGramas": 300,
+  "tagIds": [3, 4]
+}
+
+### Listar todos os Autores
+GET http://localhost:8080/tags

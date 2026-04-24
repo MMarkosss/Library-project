@@ -1,0 +1,176 @@
+### 1. Fazer Login e Salvar o Token Automaticamente
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "login": "marcos@email.com",
+  "senha": "123456"
+}
+
+> {%
+    // Este script roda assim que o Login responde 200 OK.
+    // Ele pega o token do JSON e salva numa variável global do IntelliJ chamada 'auth_token'.
+    client.global.set("auth_token", response.body.token);
+    client.test("Login efetuado com sucesso", function() {
+        client.assert(response.status === 200, "A resposta não foi 200");
+    });
+%}
+
+### 1.5. Fazer Login como Usuário Comum (Via INSERT Generico)
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "login": "leitor@email.com",
+  "senha": "123456"
+}
+
+> {%
+    // Salva o token do leitor em UMA OUTRA variável para não apagar a do Admin
+    client.global.set("auth_token_comum", response.body.token);
+%}
+
+### 1.5. Fazer Login como Usuário Comum (Via INSERT Generico)
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "login": "cliente.novo@email.com",
+  "senha": "senha-super-secreta"
+}
+
+> {%
+    // Salva o token do leitor em UMA OUTRA variável para não apagar a do Admin
+    client.global.set("auth_token_comum_cadastro", response.body.token);
+%}
+
+### Cadastrar Novo Usuário  (Rota Pública)
+POST http://localhost:8080/usuarios/registrar
+Content-Type: application/json
+
+{
+  "login": "cliente.novo@email.com",
+  "senha": "senha-super-secreta"
+}
+
+
+### 2. Listar Livros (Rota Pública - Não precisa de Token)
+GET http://localhost:8080/livros
+Accept: application/json
+
+### 2. Listar Livros (Rota Pública - Não precisa de Token)
+GET http://localhost:8080/tags
+Accept: application/json
+
+### 3. Cadastrar Livro (Rota Protegida - Usando a variável do Token)
+POST http://localhost:8080/livros
+Content-Type: application/json # Olha a mágica aqui: O IntelliJ injeta o token que capturamos no Passo 1!
+Authorization: Bearer {{auth_token}}
+
+{
+  "titulo": "cronicas de gelo e fogo",
+  "preco": "80",
+  "paginas": 500,
+  "genero": "FICCAO",
+  "autorId": 1,
+  "tipo": "FISICO",
+  "pesoGramas": 150,
+  "quantidade": 3,
+  "tagIds": [1]
+}
+
+
+### 3. Cadastrar Autor (Rota Protegida - Usando a variável do Token)
+POST http://localhost:8080/autores
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "nome": "George R.R. Martin",
+  "biografia": "Autor, roteirista e produtor de televisão americano."
+}
+
+###  Listar autores (Rota Pública - Não precisa de Token)
+GET http://localhost:8080/autores
+Accept: application/json
+
+### Cadastrar Livro (Rota Protegida)
+POST http://localhost:8080/livros
+Content-Type: application/json
+# Usando o token do leitor comum:
+Authorization: Bearer {{auth_token_comum}}
+
+{
+  "titulo": "Cronicas de gelo e fogo",
+  "preco": "80",
+  "paginas": 500,
+  "genero": "FICCAO",
+  "autorId": 2,
+  "tipo": "FISICO",
+  "pesoGramas": 150,
+  "quantidade": 3,
+  "tagIds": [1]
+}
+
+### 4. Comprar um Livro
+# Vamos supor que o Livro de ID 1 exista no seu banco e tenha estoque.
+POST http://localhost:8080/transacoes/comprar/1
+Authorization: Bearer {{auth_token_comum}}
+
+### 5. Emprestar um Livro
+# Vamos tentar emprestar o mesmo livro
+POST http://localhost:8080/transacoes/emprestar/1
+Authorization: Bearer {{auth_token_comum}}
+
+### Cria tag
+POST http://localhost:8080/tags
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+    "nome": "Terra Média"
+}
+
+### Deleta tag
+DELETE http://localhost:8080/tags/1
+Authorization: Bearer {{auth_token}}
+
+
+### Cadastrar Livro
+POST http://localhost:8080/livros
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "titulo": "cronicas de gelo e fogo",
+  "paginas": 500,
+  "genero": "FICCAO",
+  "autorId": 2,
+  "tipo": "FISICO",
+  "pesoGramas": 150,
+  "quantidade": 3,
+  "tagIds": [1],
+  "preco": "120.00",
+  "dataPublicacao": "2022-12-03"
+}
+
+### 4. Comprar um Livro
+# Vamos supor que o Livro de ID 1 exista no seu banco e tenha estoque.
+POST http://localhost:8080/transacoes/comprar/1
+Authorization: Bearer {{auth_token_comum}}
+
+### 5. Emprestar um Livro
+# Vamos tentar emprestar o mesmo livro
+POST http://localhost:8080/transacoes/emprestar/1
+Authorization: Bearer {{auth_token_comum}}
+
+### 6. Atualizar Apenas o Preço e o Título (PATCH)
+PATCH http://localhost:8080/livros/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "titulo": "O Senhor dos Anéis: Edição Definitiva",
+  "preco": 120.50
+}
+

@@ -1,0 +1,27 @@
+services:
+  # 1. O nosso velho conhecido: O Banco de Dados
+  db:
+    image: postgres:15
+    container_name: livraria-compose-v2
+    environment:
+      POSTGRES_USER: marcos
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: livrariamarkdb
+    ports:
+      - "5432:5432"
+
+  # 2. A grande novidade: A sua API Java!
+  api:
+    build: api # Manda o Docker ler o Dockerfile que criamos
+    container_name: api-livraria-java-v2
+    restart: on-failure # <-- ADICIONE ESTA LINHA AQUI!
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db # A API só liga DEPOIS que o banco estiver de pé
+    environment:
+      # O pulo do gato: A API não vai mais procurar o banco no "localhost",
+      # mas sim no nome do serviço criado acima: "db"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/livrariamarkdb
+      SPRING_DATASOURCE_USERNAME: marcos
+      SPRING_DATASOURCE_PASSWORD: 12345
