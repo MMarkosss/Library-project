@@ -22,7 +22,7 @@ Content-Type: application/json
 
 {
   "nome": "Robert C. Martin",
-  "biografia": "O autor do livro Clean Code: A Handbook of Agile Software Craftsmanship (Código Limpo)."
+  "biografia": "O authors do books Clean Code: A Handbook of Agile Software Craftsmanship (Código Limpo)."
 }
 
 
@@ -36,13 +36,13 @@ Content-Type: application/json
   "dataLancamento": "2003-03-18",
   "paginas": 500,
   "preco": 60.0,
-  "genero": "FICCAO",
+  "genre": "FICCAO",
   "autorId": 1,
   "tipo": "Fisico",
   "pesoGramas": 450
 }
 
-###Cadastro de Ebook para o autor 2
+###Cadastro de Ebook para o author 2
 POST http://localhost:8080/livros
 Content-Type: application/json
 
@@ -51,7 +51,7 @@ Content-Type: application/json
   "preco": 80.0,
   "paginas": 300,
   "dataLancamento": "2008-09-01",
-  "genero": "TECNICO",
+  "genre": "TECNICO",
   "autorId": 2,
   "tipo": "Ebook",
   "tamanhoMb": 5.4,
@@ -66,7 +66,7 @@ Content-Type: application/json
   "tipo": "FISICO",
   "titulo": "O Senhor dos Anéis",
   "paginas": 1200,
-  "genero": "FICCAO",
+  "genre": "FICCAO",
   "preco": 99.0,
   "dataLancamento": "1954-07-29",
   "autorId":1
@@ -132,7 +132,7 @@ Content-Type: application/json
   "preco": 42.0,
   "paginas": 300,
   "dataLancamento": "2008-09-01",
-  "genero": "FICCAO",
+  "genre": "FICCAO",
   "autorId": 3,
   "tipo": "Ebook",
   "tamanhoMb": 5.4,
@@ -151,7 +151,7 @@ Content-Type: application/json
   "tipo": "FISICO",
   "titulo": "Zezão",
   "paginas": 300,
-  "genero": "TERROR",
+  "genre": "TERROR",
   "preco": 105.0,
   "dataLancamento": "3229-03-22",
   "autorId":1,

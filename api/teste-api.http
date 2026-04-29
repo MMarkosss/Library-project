@@ -27,7 +27,7 @@ Content-Type: application/json
 
 > {%
     // Salva o token do leitor em UMA OUTRA variável para não apagar a do Admin
-    client.global.set("auth_token_comum", response.body.token);
+    client.global.set("auth_token_comum_insert", response.body.token);
 %}
 
 ### 1.5. Fazer Login como Usuário Comum (Via INSERT Generico)
@@ -41,7 +41,7 @@ Content-Type: application/json
 
 > {%
     // Salva o token do leitor em UMA OUTRA variável para não apagar a do Admin
-    client.global.set("auth_token_comum_cadastro", response.body.token);
+    client.global.set("auth_token_comum_cadastrado", response.body.token);
 %}
 
 ### Cadastrar Novo Usuário  (Rota Pública)
@@ -71,7 +71,7 @@ Authorization: Bearer {{auth_token}}
   "titulo": "cronicas de gelo e fogo",
   "preco": "80",
   "paginas": 500,
-  "genero": "FICCAO",
+  "genre": "FICCAO",
   "autorId": 1,
   "tipo": "FISICO",
   "pesoGramas": 150,
@@ -87,7 +87,7 @@ Authorization: Bearer {{auth_token}}
 
 {
   "nome": "George R.R. Martin",
-  "biografia": "Autor, roteirista e produtor de televisão americano."
+  "biografia": "authors, roteirista e produtor de televisão americano."
 }
 
 ###  Listar autores (Rota Pública - Não precisa de Token)
@@ -104,7 +104,7 @@ Authorization: Bearer {{auth_token_comum}}
   "titulo": "Cronicas de gelo e fogo",
   "preco": "80",
   "paginas": 500,
-  "genero": "FICCAO",
+  "genre": "FICCAO",
   "autorId": 2,
   "tipo": "FISICO",
   "pesoGramas": 150,
@@ -118,7 +118,7 @@ POST http://localhost:8080/transacoes/comprar/1
 Authorization: Bearer {{auth_token_comum}}
 
 ### 5. Emprestar um Livro
-# Vamos tentar emprestar o mesmo livro
+# Vamos tentar emprestar o mesmo books
 POST http://localhost:8080/transacoes/emprestar/1
 Authorization: Bearer {{auth_token_comum}}
 
@@ -144,7 +144,7 @@ Authorization: Bearer {{auth_token}}
 {
   "titulo": "cronicas de gelo e fogo",
   "paginas": 500,
-  "genero": "FICCAO",
+  "genre": "FICCAO",
   "autorId": 2,
   "tipo": "FISICO",
   "pesoGramas": 150,
@@ -160,7 +160,7 @@ POST http://localhost:8080/transacoes/comprar/1
 Authorization: Bearer {{auth_token_comum}}
 
 ### 5. Emprestar um Livro
-# Vamos tentar emprestar o mesmo livro
+# Vamos tentar emprestar o mesmo books
 POST http://localhost:8080/transacoes/emprestar/1
 Authorization: Bearer {{auth_token_comum}}
 
@@ -171,6 +171,15 @@ Authorization: Bearer {{auth_token}}
 
 {
   "titulo": "O Senhor dos Anéis: Edição Definitiva",
-  "preco": 120.50
+  "preco": "120.50"
 }
+
+### Buscar Autor pelo título de um livro que ele escreveu
+GET http://localhost:8080/autores?tituloLivro=senhor
+
+### Buscar Livros por parte do Título
+GET http://localhost:8080/livros?titulo=Anéis
+
+### Buscar Livros por Gênero
+GET http://localhost:8080/livros?genre=FICCAO
 

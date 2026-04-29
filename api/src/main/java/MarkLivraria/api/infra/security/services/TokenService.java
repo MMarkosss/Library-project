@@ -1,6 +1,7 @@
 package MarkLivraria.api.infra.security.services;
 
-import MarkLivraria.api.features.Usuario.Usuario;
+
+import MarkLivraria.api.features.users.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -18,16 +19,16 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String gerarToken(Usuario usuario) {
+    public String generateToken(User user) {
         try {
             // Escolhemos o algoritmo de criptografia HMAC256 e passamos o nosso segredo
-            var algoritmo = Algorithm.HMAC256(secret);
+            var algorithm = Algorithm.HMAC256(secret);
 
             return JWT.create()
                     .withIssuer("API Livraria") // Quem emitiu a pulseira?
-                    .withSubject(usuario.getUsername()) // De quem é a pulseira?
-                    .withExpiresAt(dataExpiracao()) // Quando ela perde a validade?
-                    .sign(algoritmo); // Assina e finaliza!
+                    .withSubject(user.getUsername()) // De quem é a pulseira?
+                    .withExpiresAt(expirationDate()) // Quando ela perde a validade?
+                    .sign(algorithm); // Assina e finaliza!
 
         } catch (JWTCreationException exception){
             throw new RuntimeException("Erro ao gerar token JWT", exception);
@@ -35,13 +36,13 @@ public class TokenService {
     }
 
     // Método novo para validar a pulseira e extrair o e-mail do usuário
-    public String getSubject(String tokenJWT) {
+    public String getSubject(String jwtToken) {
         try {
-            var algoritmo = Algorithm.HMAC256(secret);
-            return JWT.require(algoritmo)
+            var algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
                     .withIssuer("API Livraria")
                     .build()
-                    .verify(tokenJWT) // O Auth0 verifica se a assinatura é válida e se não expirou
+                    .verify(jwtToken) // O Auth0 verifica se a assinatura é válida e se não expirou
                     .getSubject();    // Se estiver tudo OK, devolve o e-mail (marcos@email.com)
         } catch (com.auth0.jwt.exceptions.JWTVerificationException exception) {
             throw new RuntimeException("Token JWT inválido ou expirado!");
@@ -49,7 +50,7 @@ public class TokenService {
     }
 
     // Regra de negócio: O Token dura exatas 2 horas a partir do momento do login
-    private Instant dataExpiracao() {
+    private Instant expirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }
