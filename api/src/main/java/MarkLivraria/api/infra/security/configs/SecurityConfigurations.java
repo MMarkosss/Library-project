@@ -26,11 +26,6 @@ public class SecurityConfigurations {
     private final SecurityFilter securityFilter;
 
     @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
-    // Configuração do Filtro e Controle de Acesso
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 // 1. Desliga a proteção contra ataques CSRF (pois usaremos Tokens JWT que já são seguros)

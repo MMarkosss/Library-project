@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter // Cria todos os get() invisivelmente
 @Setter // Cria todos os set() invisivelmente
-@Table(name = "books")
+@Table (name = "books")
 @Inheritance(strategy = InheritanceType.JOINED) // O Hibernate agora sabe que deve quebrar as tabelas!
 public class Book {
 
@@ -28,16 +28,16 @@ public class Book {
     private String title;
 
     @ManyToOne // 1. Diz ao Spring: "Muitos livros para Um authors"
-    @JoinColumn(name = "autor_id",nullable = false) // 2. Cria a coluna de Chave Estrangeira no banco
+    @JoinColumn(name = "authors_id",nullable = false) // 2. Cria a coluna de Chave Estrangeira no banco
     private Author author;
 
     private Integer pages;
 
     @ManyToMany
     @JoinTable(
-            name = "livro_tag", // O nome da tabela intermediária lá do V2
-            joinColumns = @JoinColumn(name = "livro_id"), // O id do dono do relacionamento (Livro)
-            inverseJoinColumns = @JoinColumn(name = "tag_id") // O id do outro lado (Tag)
+            name = "books_tags", // O nome da tabela intermediária lá do V2
+            joinColumns = @JoinColumn(name = "books_id"), // O id do dono do relacionamento (Livro)
+            inverseJoinColumns = @JoinColumn(name = "tags_id") // O id do outro lado (Tag)
     )
     private List<Tag> tags = new ArrayList<>();
 

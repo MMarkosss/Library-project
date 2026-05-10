@@ -2,8 +2,8 @@ package MarkLivraria.api.features.authors;
 
 import MarkLivraria.api.features.authors.dto.AuthorRequestDTO;
 import MarkLivraria.api.features.authors.dto.AuthorResponseDTO;
-
 import MarkLivraria.api.features.authors.dto.AuthorSimpleResponse;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/authors")
+@RequestMapping("/autores")
 public class AuthorController {
 
     private final AuthorService authorService;

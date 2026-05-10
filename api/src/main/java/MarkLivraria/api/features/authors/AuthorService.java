@@ -1,7 +1,6 @@
 package MarkLivraria.api.features.authors;
 
 import MarkLivraria.api.features.authors.dto.AuthorRequestDTO;
-import MarkLivraria.api.features.authors.dto.AutorRequestDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.Map;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
-    private final ObjectMapper objectMapper;
 
 
     public Author findAuthorById(Long id) {
@@ -66,6 +64,10 @@ public class AuthorService {
     public Author partialUpdate(Long id, Map<String, Object> fields) {
 
         Author existingAuthor = findAuthorById(id); // Usa o seu método que lança exceção se não achar
+
+        // Instancia manualmente e registra os módulos nativos (essencial para ler LocalDate)
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
 
         // Iteramos sobre o Map (Chave = nome do campo no JSON, Valor = conteúdo)
         fields.forEach((propertyName, propertyValue) -> {

@@ -9,11 +9,11 @@ import lombok.Setter;
 @Entity
 @Getter // Cria todos os get() invisivelmente
 @Setter // Cria todos os set() invisivelmente
-@Table(name = "fisico")
+@Table (name = "physical")
 public class Physical extends Book{
-    @Column(name = "peso_gramas")
+    @Column(name = "weight_grams")
     private Integer weightGrams;
-    @Column (name = "quantidade_estoque")
+    @Column (name = "stock_quantity")
     private Integer stockQuantity;
 
     // Construtor vazio obrigatório do JPA!

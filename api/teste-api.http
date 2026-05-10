@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "login": "marcos@email.com",
-  "senha": "123456"
+  "password": "123456"
 }
 
 > {%
@@ -68,14 +68,14 @@ Content-Type: application/json # Olha a mágica aqui: O IntelliJ injeta o token 
 Authorization: Bearer {{auth_token}}
 
 {
-  "titulo": "cronicas de gelo e fogo",
-  "preco": "80",
-  "paginas": 500,
+  "title": "cronicas de gelo e fogo",
+  "price": "80",
+  "pages": 500,
   "genre": "FICCAO",
   "autorId": 1,
-  "tipo": "FISICO",
-  "pesoGramas": 150,
-  "quantidade": 3,
+  "type":"PHYSICAL",
+  "weightGrams": 150,
+  "quantity": 3,
   "tagIds": [1]
 }
 
@@ -86,8 +86,8 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "nome": "George R.R. Martin",
-  "biografia": "authors, roteirista e produtor de televisão americano."
+  "name": "George R.R. Martin",
+  "biography": "authors, roteirista e produtor de televisão americano."
 }
 
 ###  Listar autores (Rota Pública - Não precisa de Token)
@@ -128,7 +128,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-    "nome": "Terra Média"
+    "name": "Terra Média"
 }
 
 ### Deleta tag
@@ -142,16 +142,16 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "titulo": "cronicas de gelo e fogo",
-  "paginas": 500,
+  "title": "cronicas de gelo e fogo",
+  "pages": 500,
   "genre": "FICCAO",
-  "autorId": 2,
-  "tipo": "FISICO",
-  "pesoGramas": 150,
-  "quantidade": 3,
+  "authorId": 1,
+  "type": "PHYSICAL",
+  "weightGrams": 150,
+  "quantity": 3,
   "tagIds": [1],
-  "preco": "120.00",
-  "dataPublicacao": "2022-12-03"
+  "price": "120.00",
+  "publicationDate": "2022-12-03"
 }
 
 ### 4. Comprar um Livro

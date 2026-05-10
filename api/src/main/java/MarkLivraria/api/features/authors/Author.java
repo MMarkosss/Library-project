@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter // Cria todos os get() invisivelmente
 @Setter // Cria todos os set() invisivelmente
+@Table (name = "authors")
 public class Author {
 
     @Id
@@ -20,7 +21,7 @@ public class Author {
     @Column(nullable = false) // Avisa o Hibernate: "Fique tranquilo, lá no banco isso é NOT NULL"
     private String name;
 
-    @OneToMany(mappedBy = "authors") // O nome "authors" tem que ser IGUAL ao nome da variável que está na classe Livro
+    @OneToMany(mappedBy = "author") // O nome "authors" tem que ser IGUAL ao nome da variável que está na classe Livro
     private List<Book> books = new ArrayList<>();
 
     private String biography;
