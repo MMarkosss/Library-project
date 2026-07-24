@@ -53,6 +53,9 @@ public class SecurityConfigurations {
                     // Permite que o Spring Boot acesse a rota de montagem de erros
                     req.requestMatchers("/error").permitAll();
 
+                    // Adicione a linha abaixo para liberar o acesso ao chatbot
+                    req.requestMatchers(HttpMethod.POST, "/chatbot").permitAll();
+
                     // --- NOVA REGRA DE AUTORIZAÇÃO AQUI ---
                     // 2. Se a requisição chegou aqui, sabemos que NÃO É GET (é Post, Put ou Delete).
                     // Então, trancamos a rota inteira apenas para quem é Chefe.

@@ -79,6 +79,14 @@ Authorization: Bearer {{auth_token}}
   "tagIds": [1]
 }
 
+### Testando chatbot
+POST http://localhost:8080/chatbot
+Content-Type: application/json
+
+{
+  "message": "Quais tipos de livros vocês costumam vender?"
+}
+
 
 ### 3. Cadastrar Autor (Rota Protegida - Usando a variável do Token)
 POST http://localhost:8080/autores
